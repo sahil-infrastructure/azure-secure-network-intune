@@ -97,10 +97,15 @@ Resolution steps
 azure-secure-network-intune/
 │
 ├── architecture/      # Design explanations and diagrams
+
 ├── networking/        # VNet, NSG, and VPN concepts
+
 ├── intune/            # Device compliance and access control
+
 ├── troubleshooting/  # Failure scenarios and fixes
+
 ├── notes/             # Lessons learned during the build
+
 └── README.md
 
 
