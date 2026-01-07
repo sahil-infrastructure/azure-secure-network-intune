@@ -1,179 +1,147 @@
-# Azure Secure Network with Intune
+# Azure Network & Security Infrastructure using Terraform
 
-A learning-focused infrastructure project demonstrating how **identity**, **device trust**, and **network security** work together in a modern Azure environment.
+## Project Status
 
-This project is intentionally designed as a **hands-on lab**, built step by step to understand real-world cloud access patterns rather than production-scale complexity.
+✅ **Completed** – Infrastructure design and security layer implemented using Terraform.
+
+This project intentionally focuses on **Azure networking and security infrastructure**.
+The compute layer (virtual machines) was evaluated but excluded due to **Azure Free Trial
+quota and regional capacity restrictions**, which were investigated and documented as part
+of real-world cloud constraints.
 
 ---
 
 ## Project Overview
 
-Modern cloud security no longer relies only on firewalls or VPNs.  
-Access decisions are increasingly based on:
+This project demonstrates how **Azure network infrastructure and security controls**
+can be designed, provisioned, and managed using **Infrastructure as Code (IaC) with Terraform**.
 
-- **Who the user is**
-- **Which device they are using**
-- **Whether the device is compliant**
-- **How the network is secured**
-
-This project demonstrates how secure access to Azure resources can be designed using:
-
-- Microsoft Entra ID (Azure AD) for identity
-- Microsoft Intune for device compliance
-- Azure networking components for traffic control
-
-Together, these layers form a **Zero Trust–aligned access model**.
+Rather than focusing on application deployment, the goal of this project is to build a
+**strong, production-aligned foundation** consisting of virtual networking, subnet
+segmentation, and network security rules — components that are commonly designed and
+validated independently in real infrastructure projects.
 
 ---
 
-## Why This Project Exists
+## What This Project Demonstrates
 
-In modern enterprise environments:
-
-- Users may authenticate successfully, but their devices may be unmanaged
-- Network access alone cannot guarantee secure access
-- Infrastructure decisions increasingly depend on identity and device trust
-
-This project exists to explore how:
-
-- **Microsoft Entra ID** controls user identity
-- **Microsoft Intune** evaluates device compliance
-- **Azure networking** enforces network boundaries
-- **Conditional Access** ties identity and device trust together
-
----
-
-## High-Level Access Flow (Conceptual)
-
-1. A user signs in using Microsoft Entra ID  
-2. The device is evaluated for compliance using Microsoft Intune  
-3. Conditional Access policies allow or deny access  
-4. Approved devices connect securely to Azure resources  
-5. Network Security Groups control traffic inside the virtual network  
-
-This layered approach ensures access is granted **only when identity, device, and network conditions are satisfied**.
+- Infrastructure as Code (IaC) using Terraform
+- Azure Resource Group design
+- Azure Virtual Network (VNet) creation
+- Subnet segmentation
+- Network Security Group (NSG) implementation
+- Inbound security rule configuration
+- Subnet-level security association
+- Terraform state handling and recovery
+- Handling real-world cloud limitations (quota & capacity)
 
 ---
 
 ## Architecture Components
 
-### Identity Layer
-- **Microsoft Entra ID**
-  - User authentication
-  - Group-based access control
+### Resource Group
+Logical container for all Azure resources in this project.
 
-### Device Management Layer
-- **Microsoft Intune**
-  - Device enrollment
-  - Compliance evaluation
-  - Device trust signaling
+### Virtual Network (VNet)
+Provides isolated private networking within Azure.
 
-### Network Layer
-- **Azure Virtual Network (VNet)**
-  - Private cloud networking
+### Subnet
+Defines a segmented address space inside the VNet for workload isolation.
 
-### Security Controls
-- **Network Security Groups (NSGs)**
-  - Inbound and outbound traffic filtering
+### Network Security Group (NSG)
+Acts as a Layer-4 firewall to control inbound and outbound traffic.
 
-### Connectivity
-- **Secure access mechanisms**
-  - Designed to be expanded in later phases
-
-Each component solves a specific problem and contributes to a complete infrastructure design.
+### Network Security Rule
+An example inbound rule allowing SSH traffic (port 22) to demonstrate
+controlled access design.
 
 ---
 
-## Scope of the Project
+## Infrastructure Flow (Conceptual)
 
-### Included
-- Azure identity fundamentals
-- Group-based access control
-- Device trust using Microsoft Intune
-- Zero Trust access concepts
-- Realistic troubleshooting scenarios
-- Clear documentation and reasoning
+1. Terraform initializes Azure provider
+2. Resource Group is created
+3. Virtual Network is provisioned
+4. Subnet is defined within the VNet
+5. Network Security Group is created
+6. Security rules are applied
+7. NSG is associated with the subnet
 
-### Intentionally Excluded
-- Enterprise-scale high availability
-- Advanced firewall appliances
-- Large-scale automation or CI/CD pipelines
+This layered approach reflects how infrastructure is commonly built and secured in
+real production environments.
 
-The focus is **understanding**, not production complexity.
+---
 
-```
+## Compute Consideration
+
+Virtual machine deployment was explored as part of this project.
+However, Azure Free Trial compute quotas and regional SKU capacity restrictions prevented
+reliable VM provisioning across multiple regions and sizes.
+
+Rather than forcing an unstable or incomplete design, the project was finalized at the
+**network and security layer**, which is frequently designed and validated independently
+before compute is introduced in real-world infrastructure workflows.
+
+---
+
 ## Repository Structure
-
-azure-secure-network-intune/
-├── README.md
-├── architecture/ # Architecture explanations and diagrams
-├── networking/ # VNet, NSG, and networking concepts
-├── intune/ # Device enrollment and compliance
-├── troubleshooting/ # Failure scenarios and resolutions
-└── notes/ # Design decisions and lessons learned
-
+```
+terraform/
+├── main.tf # Core infrastructure resources
+├── providers.tf # Azure provider configuration
+├── variables.tf # Reusable variables
+├── outputs.tf # Outputs (if applicable)
+├── .terraform.lock.hcl
+README.md
 ```
 
-## Learning Goals
-
-This project was built to:
-
-- Understand how identity affects network access
-- Learn how Microsoft Intune integrates with infrastructure security
-- Explore how device compliance influences Conditional Access
-- Practice troubleshooting real infrastructure failures
-- Improve documentation and architectural thinking
 
 ---
 
-## Troubleshooting Mindset
+## Design Decisions
 
-Infrastructure is defined by **how failures are handled**, not just successful setups.
-
-This project intentionally includes scenarios such as:
-
-- Device marked non-compliant
-- Access blocked by Conditional Access
-- Network traffic denied by NSGs
-
-Each issue is documented with:
-- Symptoms
-- Root cause
-- Resolution steps
+- Terraform used for repeatable and auditable infrastructure provisioning
+- Network and security layers prioritized over compute
+- Variables used to centralize configuration
+- Infrastructure scoped intentionally to avoid unnecessary cloud costs
+- Limitations documented instead of hidden
 
 ---
 
-## Security and Cost Considerations
+## Limitations
 
-- All work is performed in a **personal lab tenant**
-- No production environments are used
-- No secrets, credentials, or tenant IDs are stored
-- Only free or trial-based services are used
-- Resources are shut down or removed when not needed
+- No virtual machines deployed due to Azure Free Trial restrictions
+- No application runtime included
+- No CI/CD pipelines in this repository
 
----
-
-## Lessons Learned
-
-This is a living section that evolves as the project grows.  
-It captures:
-
-- What was initially confusing
-- What became clear through hands-on work
-- Design decisions that would change in future iterations
+These aspects are intentionally handled in **separate, dedicated projects**.
 
 ---
 
-## How to Use This Repository
+## Out of Scope / Next Steps
 
-1. Read the Project Overview and Architecture sections
-2. Follow the phases documented in the `notes/` directory
-3. Review troubleshooting scenarios to understand failure handling
-4. Use this project as a reference for learning or interview discussion
+- Compute layer (VMs or containers)
+- Application deployment
+- Container orchestration
+- CI/CD automation
+
+These are addressed in follow-up projects focusing on Docker and runtime orchestration.
 
 ---
 
-## Disclaimer
+## Key Learnings
 
-This repository represents a **learning lab**, not a production deployment.  
-Design choices prioritize clarity and understanding over enterprise scale.
+- Terraform state management is critical during iterative development
+- Cloud provider quotas can directly influence architectural decisions
+- Network and security design can be completed independently of compute
+- Real-world infrastructure often requires redesign rather than retries
+
+---
+
+## Summary
+
+This project represents a **completed and intentional infrastructure design**
+focused on Azure networking and security using Terraform. It reflects real-world
+engineering decisions, including the evaluation and documentation of cloud limitations,
+rather than forcing incomplete or unstable deployments.
+
